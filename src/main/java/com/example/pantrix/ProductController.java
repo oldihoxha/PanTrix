@@ -1,7 +1,11 @@
 package com.example.pantrix;
 
 import java.time.LocalDate;
+
+import org.springframework.context.annotation.Configuration;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
@@ -9,8 +13,7 @@ import java.util.List;
 public class ProductController {
 
 
-    @GetMapping("/products")
-
+    @GetMapping("/test")
     public List<Product> getProducts() {
         return List.of(
                 new Product("Milch", LocalDate.of(2025, 10, 20)),
@@ -18,4 +21,11 @@ public class ProductController {
                 new Product("Wudy Bratwurst", LocalDate.of(2025, 11, 5))
         );
     }
+
+    @PostMapping("/products")
+    public Product addProduct(@RequestBody Product product) {
+
+        return product;
+    }
+
 }
