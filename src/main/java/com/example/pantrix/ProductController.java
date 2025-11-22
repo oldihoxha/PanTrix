@@ -2,7 +2,7 @@ package com.example.pantrix;
 
 import java.time.LocalDate;
 
-import org.springframework.context.annotation.Configuration;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
