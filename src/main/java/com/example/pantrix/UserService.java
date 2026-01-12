@@ -14,16 +14,11 @@ public class UserService {
 
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-    /**
-     * Register a new user
-     */
     public AuthResponse register(RegisterRequest request) {
-        // Check if email already exists
         if (userRepository.existsByEmail(request.getEmail())) {
             return new AuthResponse(false, "Email already registered");
         }
 
-        // Validate input
         if (request.getEmail() == null || request.getEmail().trim().isEmpty()) {
             return new AuthResponse(false, "Email is required");
         }
@@ -38,7 +33,6 @@ public class UserService {
         }
 
         try {
-            // Create new user with encrypted password
             User newUser = new User(
                 request.getEmail(),
                 passwordEncoder.encode(request.getPassword()),
@@ -53,11 +47,7 @@ public class UserService {
         }
     }
 
-    /**
-     * Login user
-     */
     public AuthResponse login(LoginRequest request) {
-        // Validate input
         if (request.getEmail() == null || request.getEmail().trim().isEmpty()) {
             return new AuthResponse(false, "Email is required");
         }
@@ -74,7 +64,6 @@ public class UserService {
 
             User user = userOptional.get();
 
-            // Check if password matches
             if (passwordEncoder.matches(request.getPassword(), user.getPassword())) {
                 return new AuthResponse(true, "Login successful", user);
             } else {
@@ -85,16 +74,10 @@ public class UserService {
         }
     }
 
-    /**
-     * Get user by ID
-     */
     public Optional<User> getUserById(Long id) {
         return userRepository.findById(id);
     }
 
-    /**
-     * Get user by email
-     */
     public Optional<User> getUserByEmail(String email) {
         return userRepository.findByEmail(email);
     }

@@ -21,7 +21,6 @@ public class User {
     @Column(nullable = false)
     private String lastName;
 
-    // Constructors
     public User() {}
 
     public User(String email, String password, String firstName, String lastName) {
@@ -31,7 +30,6 @@ public class User {
         this.lastName = lastName;
     }
 
-    // Getters and Setters
     public Long getId() {
         return id;
     }

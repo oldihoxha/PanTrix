@@ -5,14 +5,7 @@ public class AuthResponse {
     private String message;
     private User user;
 
-    // Constructors
     public AuthResponse() {}
-
-    public AuthResponse(boolean success, String message, User user) {
-        this.success = success;
-        this.message = message;
-        this.user = user;
-    }
 
     public AuthResponse(boolean success, String message) {
         this.success = success;
@@ -20,7 +13,12 @@ public class AuthResponse {
         this.user = null;
     }
 
-    // Getters and Setters
+    public AuthResponse(boolean success, String message, User user) {
+        this.success = success;
+        this.message = message;
+        this.user = user;
+    }
+
     public boolean isSuccess() {
         return success;
     }

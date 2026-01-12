@@ -16,10 +16,6 @@ public class AuthController {
     @Autowired
     private UserService userService;
 
-    /**
-     * Register endpoint
-     * POST /api/auth/register
-     */
     @PostMapping("/register")
     public ResponseEntity<AuthResponse> register(@RequestBody RegisterRequest request) {
         AuthResponse response = userService.register(request);
@@ -31,10 +27,6 @@ public class AuthController {
         }
     }
 
-    /**
-     * Login endpoint
-     * POST /api/auth/login
-     */
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest request) {
         AuthResponse response = userService.login(request);
@@ -46,10 +38,6 @@ public class AuthController {
         }
     }
 
-    /**
-     * Health check endpoint
-     * GET /api/auth/health
-     */
     @GetMapping("/health")
     public ResponseEntity<String> health() {
         return ResponseEntity.ok("Auth service is running");
