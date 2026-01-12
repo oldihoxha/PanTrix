@@ -15,6 +15,7 @@ public class CrossConfig implements WebMvcConfigurer {
         registry.addMapping("/**")
                 .allowedOrigins("http://localhost:3000",
                                 "http://localhost:5173",
+                                "http://localhost:5713",
                                 "http://localhost:8080",
                                 "https://pantrix.onrender.com",
                                 "https://pantrix-frontnd.onrender.com")
