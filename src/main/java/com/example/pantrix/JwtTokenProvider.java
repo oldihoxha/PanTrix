@@ -10,7 +10,12 @@ public class JwtTokenProvider {
 
     public String generateToken(User user) {
         // Einfache Token-Generierung: Base64 kodiert
-        String tokenData = user.getId() + ":" + user.getEmail() + ":" + System.currentTimeMillis();
+        if (user == null || user.getEmail() == null) {
+            throw new IllegalArgumentException("User und Email dürfen nicht null sein");
+        }
+
+        Long userId = user.getId() != null ? user.getId() : 0L;
+        String tokenData = userId + ":" + user.getEmail() + ":" + System.currentTimeMillis();
         return Base64.getEncoder().encodeToString(tokenData.getBytes());
     }
 

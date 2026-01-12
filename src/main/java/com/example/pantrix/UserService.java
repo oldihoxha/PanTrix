@@ -29,19 +29,13 @@ public class UserService {
         if (request.getPassword() == null || request.getPassword().trim().isEmpty()) {
             return new AuthResponse(false, "Password is required");
         }
-        if (request.getFirstName() == null || request.getFirstName().trim().isEmpty()) {
-            return new AuthResponse(false, "First name is required");
-        }
-        if (request.getLastName() == null || request.getLastName().trim().isEmpty()) {
-            return new AuthResponse(false, "Last name is required");
-        }
 
         try {
             User newUser = new User(
                 request.getEmail(),
                 passwordEncoder.encode(request.getPassword()),
-                request.getFirstName(),
-                request.getLastName()
+                request.getFirstName() != null ? request.getFirstName() : "User",
+                request.getLastName() != null ? request.getLastName() : ""
             );
 
             User savedUser = userRepository.save(newUser);
@@ -49,6 +43,7 @@ public class UserService {
             return new AuthResponse(true, "User registered successfully", savedUser, token);
         } catch (Exception e) {
             return new AuthResponse(false, "Registration failed: " + e.getMessage());
+        }
         }
     }
 
