@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping("/auth")
 @CrossOrigin(origins = {"http://localhost:3000", "http://localhost:5173", "http://localhost:5713", "http://localhost:8080",
              "https://pantrix.onrender.com", "https://pantrix-frontnd.onrender.com"},
              allowedHeaders = "*",
@@ -16,7 +17,7 @@ public class AuthController {
     @Autowired
     private UserService userService;
 
-    @PostMapping("/api/auth/register")
+    @PostMapping("/register")
     public ResponseEntity<AuthResponse> register(@RequestBody RegisterRequest request) {
         AuthResponse response = userService.register(request);
 
@@ -27,7 +28,7 @@ public class AuthController {
         }
     }
 
-    @PostMapping("/api/auth/login")
+    @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest request) {
         AuthResponse response = userService.login(request);
 
@@ -38,7 +39,7 @@ public class AuthController {
         }
     }
 
-    @GetMapping("/api/auth/health")
+    @GetMapping("/health")
     public ResponseEntity<String> health() {
         return ResponseEntity.ok("Auth service is running");
     }

@@ -12,7 +12,18 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class CrossConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**")
+        registry.addMapping("/auth/**")
+                .allowedOrigins("http://localhost:3000",
+                                "http://localhost:5173",
+                                "http://localhost:5713",
+                                "http://localhost:8080",
+                                "https://pantrix.onrender.com",
+                                "https://pantrix-frontnd.onrender.com")
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                .allowedHeaders("*")
+                .allowCredentials(true);
+
+        registry.addMapping("/api/**")
                 .allowedOrigins("http://localhost:3000",
                                 "http://localhost:5173",
                                 "http://localhost:5713",
