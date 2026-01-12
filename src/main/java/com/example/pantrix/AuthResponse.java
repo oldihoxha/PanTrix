@@ -60,5 +60,13 @@ public class AuthResponse {
     public void setToken(String token) {
         this.token = token;
     }
+
+    public String getAccess_token() {
+        return token;  // Alias für Token
+    }
+
+    public void setAccess_token(String access_token) {
+        this.token = access_token;
+    }
 }
 

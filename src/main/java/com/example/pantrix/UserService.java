@@ -44,7 +44,6 @@ public class UserService {
         } catch (Exception e) {
             return new AuthResponse(false, "Registration failed: " + e.getMessage());
         }
-        }
     }
 
     public AuthResponse login(LoginRequest request) {
