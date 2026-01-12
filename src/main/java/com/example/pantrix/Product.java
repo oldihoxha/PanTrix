@@ -1,47 +1,85 @@
 package com.example.pantrix;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-
+import jakarta.persistence.*;
 import java.time.LocalDate;
-
+import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "products")
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
-        private String name;
-        private LocalDate expiryDate;
+    @Column(nullable = false)
+    private String name;
 
+    @Column(nullable = false)
+    private String category;
 
-        public Product(){}
+    @Column(nullable = false)
+    private LocalDate expiryDate;
 
-        public Product(String name, LocalDate expiryDate){
-            this.name = name;
-            this.expiryDate = expiryDate;
-        }
+    @Column(nullable = false)
+    private LocalDate addedDate;
 
-        public String getName(){
-            return name;
-        }
+    @Column(nullable = false)
+    private Integer quantity;
 
-        public void setName(String name){
-            this.name = name;
-        }
+    @Column(nullable = false)
+    private String unit;
 
-        public LocalDate getExpiryDate(){
-            return expiryDate;
-        }
+    @Column(nullable = false)
+    private String status = "aktiv"; // aktiv, verbraucht, entsorgt
 
-        public void setExpiryDate(LocalDate expiryDate){
-            this.expiryDate = expiryDate;
-        }
+    @Column
+    private String notes;
 
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime createdAt = LocalDateTime.now();
+
+    @Column(nullable = false)
+    private LocalDateTime updatedAt = LocalDateTime.now();
+
+    // Getters & Setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+
+    public User getUser() { return user; }
+    public void setUser(User user) { this.user = user; }
+
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
+
+    public String getCategory() { return category; }
+    public void setCategory(String category) { this.category = category; }
+
+    public LocalDate getExpiryDate() { return expiryDate; }
+    public void setExpiryDate(LocalDate expiryDate) { this.expiryDate = expiryDate; }
+
+    public LocalDate getAddedDate() { return addedDate; }
+    public void setAddedDate(LocalDate addedDate) { this.addedDate = addedDate; }
+
+    public Integer getQuantity() { return quantity; }
+    public void setQuantity(Integer quantity) { this.quantity = quantity; }
+
+    public String getUnit() { return unit; }
+    public void setUnit(String unit) { this.unit = unit; }
+
+    public String getStatus() { return status; }
+    public void setStatus(String status) { this.status = status; }
+
+    public String getNotes() { return notes; }
+    public void setNotes(String notes) { this.notes = notes; }
+
+    public LocalDateTime getCreatedAt() { return createdAt; }
+    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
+
+    public LocalDateTime getUpdatedAt() { return updatedAt; }
+    public void setUpdatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
 }
-
 
