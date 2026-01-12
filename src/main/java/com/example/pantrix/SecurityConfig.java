@@ -28,12 +28,11 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             .authorizeHttpRequests(authz -> authz
-                .requestMatchers("/api/auth/**").permitAll()
-                .requestMatchers("/api/products/**").permitAll()
-                .requestMatchers("/h2-console/**").permitAll()
                 .requestMatchers("/api/**").permitAll()
+                .requestMatchers("/h2-console/**").permitAll()
                 .anyRequest().permitAll()
-            );
+            )
+            .httpBasic(basic -> basic.disable());
 
         http.headers(headers -> headers.frameOptions(frameOptions -> frameOptions.disable()));
 

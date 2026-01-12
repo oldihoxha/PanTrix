@@ -15,6 +15,9 @@ public class UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private JwtTokenProvider jwtTokenProvider;
+
     public AuthResponse register(RegisterRequest request) {
         if (userRepository.existsByEmail(request.getEmail())) {
             return new AuthResponse(false, "Email already registered");
@@ -42,7 +45,8 @@ public class UserService {
             );
 
             User savedUser = userRepository.save(newUser);
-            return new AuthResponse(true, "User registered successfully", savedUser);
+            String token = jwtTokenProvider.generateToken(savedUser);
+            return new AuthResponse(true, "User registered successfully", savedUser, token);
         } catch (Exception e) {
             return new AuthResponse(false, "Registration failed: " + e.getMessage());
         }
@@ -66,7 +70,8 @@ public class UserService {
             User user = userOptional.get();
 
             if (passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-                return new AuthResponse(true, "Login successful", user);
+                String token = jwtTokenProvider.generateToken(user);
+                return new AuthResponse(true, "Login successful", user, token);
             } else {
                 return new AuthResponse(false, "Invalid password");
             }
