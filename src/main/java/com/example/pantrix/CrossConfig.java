@@ -13,7 +13,10 @@ public class CrossConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("https://pantrix.onrender.com",
+                .allowedOrigins("http://localhost:3000",
+                                "http://localhost:5173",
+                                "http://localhost:8080",
+                                "https://pantrix.onrender.com",
                                 "https://pantrix-frontnd.onrender.com")
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
