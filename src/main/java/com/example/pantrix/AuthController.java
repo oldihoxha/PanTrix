@@ -7,11 +7,6 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
-@CrossOrigin(origins = {"http://localhost:3000", "http://localhost:5173", "http://localhost:5713", "http://localhost:8080",
-             "https://pantrix.onrender.com", "https://pantrix-frontnd.onrender.com"},
-             allowedHeaders = "*",
-             methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE, RequestMethod.OPTIONS},
-             allowCredentials = "true")
 public class AuthController {
 
     @Autowired

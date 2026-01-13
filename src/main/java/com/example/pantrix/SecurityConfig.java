@@ -1,5 +1,6 @@
 package com.example.pantrix;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -7,15 +8,14 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-
-import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+
+    @Autowired(required = false)
+    private CorsConfigurationSource corsConfigurationSource;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -25,38 +25,24 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-            .csrf(csrf -> csrf.disable())
-            .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+            .csrf(csrf -> csrf.disable())  // ✅ CSRF komplett deaktivieren für REST API
+            .cors(cors -> {
+                if (corsConfigurationSource != null) {
+                    cors.configurationSource(corsConfigurationSource);
+                }
+            })  // ✅ CORS mit CorsConfigurationSource aus CorsConfig
             .authorizeHttpRequests(authz -> authz
-                .requestMatchers("/api/**").permitAll()
+                .requestMatchers("/auth/**").permitAll()  // ✅ Alle Auth-Requests erlaubt
+                .requestMatchers("/api/**").permitAll()   // ✅ Alle API-Requests erlaubt
+                .requestMatchers("/products/**").permitAll()  // ✅ Fallback Routes
                 .requestMatchers("/h2-console/**").permitAll()
-                .anyRequest().permitAll()
+                .anyRequest().permitAll()  // ✅ Alles andere auch erlaubt
             )
-            .httpBasic(basic -> basic.disable());
+            .httpBasic(basic -> basic.disable());  // ✅ Keine HTTP Basic Auth
 
         http.headers(headers -> headers.frameOptions(frameOptions -> frameOptions.disable()));
 
         return http.build();
-    }
-
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList(
-            "http://localhost:3000",
-            "http://localhost:5173",
-            "http://localhost:8080",
-            "https://pantrix.onrender.com",
-            "https://pantrix-frontnd.onrender.com"
-        ));
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
-        configuration.setAllowedHeaders(Arrays.asList("*"));
-        configuration.setAllowCredentials(true);
-        configuration.setMaxAge(3600L);
-
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
     }
 }
 

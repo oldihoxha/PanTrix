@@ -19,6 +19,16 @@ public class JwtTokenProvider {
         return Base64.getEncoder().encodeToString(tokenData.getBytes());
     }
 
+    public Long extractUserId(String token) {
+        try {
+            String decoded = new String(Base64.getDecoder().decode(token));
+            String[] parts = decoded.split(":");
+            return parts.length > 0 ? Long.parseLong(parts[0]) : null;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
     public String extractEmail(String token) {
         try {
             String decoded = new String(Base64.getDecoder().decode(token));
