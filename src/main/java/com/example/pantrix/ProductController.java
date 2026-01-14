@@ -162,9 +162,10 @@ public class ProductController {
     // POST: Produkt als verbraucht markieren
     @PostMapping("/{productId}/consume")
     public ResponseEntity<Product> consumeProduct(@PathVariable Long productId) {
-        logger.info("POST /api/products/{}/consume", productId);
+        Long userId = getCurrentUserId();
+        logger.info("POST /api/products/{}/consume für User {} aufgerufen", productId, userId);
         try {
-            Product consumed = productService.consumeProduct(productId);
+            Product consumed = productService.consumeProduct(userId, productId);
             return ResponseEntity.ok(consumed);
         } catch (RuntimeException e) {
             logger.error("Fehler beim Verbrauchen des Produkts: {}", e.getMessage());

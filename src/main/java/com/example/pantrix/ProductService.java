@@ -133,13 +133,20 @@ public class ProductService {
     }
 
     // Markiere Produkt als verbraucht
-    public Product consumeProduct(Long productId) {
-        logger.info("Markiere Produkt als verbraucht: {}", productId);
-        
+    public Product consumeProduct(Long userId, Long productId) {
+        logger.info("Markiere Produkt {} als verbraucht für User {}", productId, userId);
+
         Optional<Product> product = productRepository.findById(productId);
 
         if (product.isPresent()) {
             Product p = product.get();
+
+            // Sicherheit: Prüfe ob Produkt dem User gehört
+            if (!p.getUser().getId().equals(userId)) {
+                logger.error("User {} hat keine Berechtigung Produkt {} zu verbrauchen", userId, productId);
+                throw new RuntimeException("Sie haben keine Berechtigung dieses Produkt zu verbrauchen");
+            }
+
             p.setStatus("verbraucht");
             p.setUpdatedAt(LocalDateTime.now());
             logger.info("Produkt als verbraucht markiert: {}", productId);
