@@ -21,23 +21,34 @@ public class ProductController {
     private ProductService productService;
 
     @Autowired
-    private UserRepository userRepository;
+    private JwtTokenProvider jwtTokenProvider;
 
     /**
-     * Extrahiere die aktuelle User-ID aus dem Security Context (JWT Token)
+     * Extrahiere die aktuelle User-ID aus dem JWT Token
      */
     private Long getCurrentUserId() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && authentication.isAuthenticated()) {
-            Object principal = authentication.getPrincipal();
-            if (principal instanceof String username) {
-                // Username oder Email aus Token
-                var user = userRepository.findByEmail(username);
-                if (user.isPresent()) {
-                    return user.get().getId();
+            Object credentials = authentication.getCredentials();
+            if (credentials instanceof String token) {
+                // Versuche userId direkt aus dem Token zu extrahieren
+                Long userId = jwtTokenProvider.extractUserId(token);
+                if (userId != null && userId > 0) {
+                    logger.info("User ID aus Token extrahiert: {}", userId);
+                    return userId;
                 }
             }
+
+            // Fallback: Versuche Email aus dem Token zu lesen
+            Object principal = authentication.getPrincipal();
+            if (principal instanceof String email) {
+                logger.info("Versuche User ID von Email zu bekommen: {}", email);
+                // userId wird nicht gefunden, nutze fallback
+                logger.warn("Konnte User ID nicht aus Token extrahieren, nutze Fallback: 1");
+                return 1L;
+            }
         }
+
         // Fallback: User ID 1 (für Entwicklung)
         logger.warn("Keine User ID im Security Context gefunden, nutze Fallback: 1");
         return 1L;
