@@ -11,6 +11,9 @@ import org.slf4j.LoggerFactory;
 public class GlobalExceptionHandler {
     private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
+    /**
+     * Behandle UnauthorizedException - wirft 401 Unauthorized
+     */
     @ExceptionHandler(UnauthorizedException.class)
     public ResponseEntity<ErrorResponse> handleUnauthorizedException(UnauthorizedException ex) {
         logger.error("Unauthorized: {}", ex.getMessage());
@@ -22,17 +25,9 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
     }
 
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorResponse> handleGenericException(Exception ex) {
-        logger.error("Internal Server Error", ex);
-        ErrorResponse error = new ErrorResponse(
-            "Internal Server Error",
-            ex.getMessage(),
-            HttpStatus.INTERNAL_SERVER_ERROR.value()
-        );
-        return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-
+    /**
+     * ErrorResponse Klasse für JSON Response
+     */
     public static class ErrorResponse {
         private String status;
         private String message;
@@ -57,4 +52,6 @@ public class GlobalExceptionHandler {
         }
     }
 }
+
+
 
