@@ -67,9 +67,20 @@ public class ProductController {
     public ResponseEntity<Product> createProduct(@RequestBody Product product) {
         Long userId = getCurrentUserId();
         logger.info("POST /api/products für User {} mit Produkt: {}", userId, product.getName());
+        logger.info("Product Details - Name: {}, Category: {}, Quantity: {}, Unit: {}, ExpiryDate: {}, Status: {}",
+            product.getName(),
+            product.getCategory(),
+            product.getQuantity(),
+            product.getUnit(),
+            product.getExpiryDate(),
+            product.getStatus()
+        );
         try {
             Product created = productService.createProduct(userId, product);
             return ResponseEntity.status(HttpStatus.CREATED).body(created);
+        } catch (IllegalArgumentException e) {
+            logger.error("Validierungsfehler beim Erstellen des Produkts: {}", e.getMessage());
+            return ResponseEntity.badRequest().build();
         } catch (RuntimeException e) {
             logger.error("Fehler beim Erstellen des Produkts: {}", e.getMessage());
             return ResponseEntity.badRequest().build();
