@@ -38,20 +38,11 @@ public class ProductController {
                     return userId;
                 }
             }
-
-            // Fallback: Versuche Email aus dem Token zu lesen
-            Object principal = authentication.getPrincipal();
-            if (principal instanceof String email) {
-                logger.info("Versuche User ID von Email zu bekommen: {}", email);
-                // userId wird nicht gefunden, nutze fallback
-                logger.warn("Konnte User ID nicht aus Token extrahieren, nutze Fallback: 1");
-                return 1L;
-            }
         }
 
-        // Fallback: User ID 1 (für Entwicklung)
-        logger.warn("Keine User ID im Security Context gefunden, nutze Fallback: 1");
-        return 1L;
+        // Kein gültiger Token gefunden - werfe UnauthorizedException (401)!
+        logger.error("Konnte User ID nicht aus Token extrahieren - Anfrage nicht autorisiert");
+        throw new UnauthorizedException("Nicht autorisiert - gültiger Token erforderlich");
     }
 
     // GET: Alle Produkte des aktuellen Benutzers
