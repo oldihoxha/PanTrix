@@ -15,12 +15,15 @@ public class CorsConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
-        // Erlaubte Ursprünge
+        // Erlaubte Ursprünge - ALLE localhost und *.onrender.com
         configuration.setAllowedOrigins(Arrays.asList(
             "http://localhost:5173",
             "http://localhost:5713",
             "http://localhost:8080",
-            "https://pantrix-frontnd.onrender.com"
+            "http://localhost:3000",
+            "https://*.onrender.com",  // Alle Render-URLs
+            "https://pantrix-frontnd.onrender.com",
+            "https://pantrix-frontend.onrender.com"
         ));
 
         // Erlaubte HTTP-Methoden
@@ -29,10 +32,10 @@ public class CorsConfig {
         // Erlaubte Header
         configuration.setAllowedHeaders(Arrays.asList("*"));
 
-        // Exponierte Header (wichtig für Tokens)
-        configuration.setExposedHeaders(Arrays.asList("Authorization", "Content-Type"));
+        // Exponierte Header (WICHTIG für Authorization!)
+        configuration.setExposedHeaders(Arrays.asList("Authorization", "Content-Type", "X-Total-Count"));
 
-        // Credentials erlauben
+        // Credentials erlauben - WICHTIG für Token!
         configuration.setAllowCredentials(true);
 
         // Max Age für CORS Preflight Cache (in Sekunden)
